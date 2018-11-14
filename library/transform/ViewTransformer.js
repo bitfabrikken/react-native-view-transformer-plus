@@ -392,13 +392,13 @@ export default class ViewTransformer extends React.Component {
       (dx > 0 && availablePanDistance.left < 0) ||
       (dx < 0 && availablePanDistance.right < 0)
     ) {
-      dx /= this.props.levelOfResistance;
+      dx /= this.props.levelOfResistance ? this.props.levelOfResistance : 3;
     }
     if (
       (dy > 0 && availablePanDistance.top < 0) ||
       (dy < 0 && availablePanDistance.bottom < 0)
     ) {
-      dy /= this.props.levelOfResistance;
+      dy /= this.props.levelOfResistance ? this.props.levelOfResistance : 3;
     }
     return {
       dx,
