@@ -92,23 +92,9 @@ export default class ViewTransformer extends React.Component {
   }
 
   componentWillMount() {
-    // this.gestureResponder = createResponder({
-    //   onStartShouldSetResponder: (evt, gestureState) => true,
-    //   onMoveShouldSetResponderCapture: (evt, gestureState) => true,
-    //   //onMoveShouldSetResponder: this.handleMove,
-    //   onResponderMove: this.onResponderMove.bind(this),
-    //   onResponderGrant: this.onResponderGrant.bind(this),
-    //   onResponderRelease: this.onResponderRelease.bind(this),
-    //   onResponderTerminate: this.onResponderRelease.bind(this),
-    //   onResponderTerminationRequest: (evt, gestureState) => false, //Do not allow parent view to intercept gesture
-    //   onResponderSingleTapConfirmed: (evt, gestureState) => {
-    //     this.props.onSingleTapConfirmed && this.props.onSingleTapConfirmed();
-    //   }
-    // });
-
     this.gestureResponder = createResponder({
-      onStartShouldSetResponder: this.handleStartShouldSetResponder,
-      onMoveShouldSetResponderCapture: this.handleMoveShouldSetResponder,
+      onStartShouldSetResponder: (evt, gestureState) => true,
+      onMoveShouldSetResponderCapture: (evt, gestureState) => true,
       //onMoveShouldSetResponder: this.handleMove,
       onResponderMove: this.onResponderMove.bind(this),
       onResponderGrant: this.onResponderGrant.bind(this),
@@ -119,6 +105,20 @@ export default class ViewTransformer extends React.Component {
         this.props.onSingleTapConfirmed && this.props.onSingleTapConfirmed();
       }
     });
+
+    // this.gestureResponder = createResponder({
+    //   onStartShouldSetResponder: this.handleStartShouldSetResponder,
+    //   onMoveShouldSetResponderCapture: this.handleMoveShouldSetResponder,
+    //   //onMoveShouldSetResponder: this.handleMove,
+    //   onResponderMove: this.onResponderMove.bind(this),
+    //   onResponderGrant: this.onResponderGrant.bind(this),
+    //   onResponderRelease: this.onResponderRelease.bind(this),
+    //   onResponderTerminate: this.onResponderRelease.bind(this),
+    //   onResponderTerminationRequest: (evt, gestureState) => false, //Do not allow parent view to intercept gesture
+    //   onResponderSingleTapConfirmed: (evt, gestureState) => {
+    //     this.props.onSingleTapConfirmed && this.props.onSingleTapConfirmed();
+    //   }
+    // });
   }
 
   componentDidUpdate(prevProps, prevState) {
