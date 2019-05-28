@@ -92,9 +92,23 @@ export default class ViewTransformer extends React.Component {
   }
 
   componentWillMount() {
+    // this.gestureResponder = createResponder({
+    //   onStartShouldSetResponder: (evt, gestureState) => true,
+    //   onMoveShouldSetResponderCapture: (evt, gestureState) => true,
+    //   //onMoveShouldSetResponder: this.handleMove,
+    //   onResponderMove: this.onResponderMove.bind(this),
+    //   onResponderGrant: this.onResponderGrant.bind(this),
+    //   onResponderRelease: this.onResponderRelease.bind(this),
+    //   onResponderTerminate: this.onResponderRelease.bind(this),
+    //   onResponderTerminationRequest: (evt, gestureState) => false, //Do not allow parent view to intercept gesture
+    //   onResponderSingleTapConfirmed: (evt, gestureState) => {
+    //     this.props.onSingleTapConfirmed && this.props.onSingleTapConfirmed();
+    //   }
+    // });
+
     this.gestureResponder = createResponder({
-      onStartShouldSetResponder: (evt, gestureState) => true,
-      onMoveShouldSetResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetResponder: this.handleStartShouldSetResponder,
+      onMoveShouldSetResponderCapture: this.handleMoveShouldSetResponder,
       //onMoveShouldSetResponder: this.handleMove,
       onResponderMove: this.onResponderMove.bind(this),
       onResponderGrant: this.onResponderGrant.bind(this),
@@ -119,6 +133,25 @@ export default class ViewTransformer extends React.Component {
   componentWillUnmount() {
     this.cancelAnimation();
   }
+
+  handleStartShouldSetResponder = (
+    { nativeEvent: { touches } },
+    gestureState
+  ) => {
+    const { length } = touches;
+    if (this.props.isOneFingerTouch && gestureState.numberActiveTouches === 1) {
+      return false;
+    }
+    return true;
+  };
+
+  handleMoveShouldSetResponder = (
+    { nativeEvent: { touches } },
+    gestureState
+  ) => {
+    const { length } = touches;
+    return length > 1;
+  };
 
   render() {
     let gestureResponder = this.gestureResponder;
@@ -491,13 +524,16 @@ ViewTransformer.propTypes = {
 
   onTransformGestureReleased: PropTypes.func,
 
-  onSingleTapConfirmed: PropTypes.func
+  onSingleTapConfirmed: PropTypes.func,
+
+  isOneFingerTouch: PropTypes.bool
 };
 ViewTransformer.defaultProps = {
   maxOverScrollDistance: 20,
   enableScale: true,
   enableTranslate: true,
   enableTransform: true,
+  isOneFingerTouch: false,
   maxScale: 1,
   minScale: 1,
   enableResistance: false
